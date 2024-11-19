@@ -1,45 +1,32 @@
-// src/App.js
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "./context/AuthContext";
-import Login from "./pages/Login";
-import Schedule from "./pages/Schedule";
-import TimeClock from "./pages/TimeClock";
-import AddJob from "./pages/AddJob";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Sidebar from './components/layout/Sidebar';
+import Schedule from './pages/Schedule';
 
-function AppContent() {
-  const { isAuthenticated } = useAuth();
-
+const AppContent = () => {
   return (
-    <div className="main-container">
-      <div className="app-content">
+    <div className="app">
+      <Sidebar />
+      <div className="main-content">
         <Routes>
-          <Route
-            path="/"
-            element={
-              isAuthenticated ? <Navigate to="/schedule" /> : <Navigate to="/login" />
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          {isAuthenticated && (
-            <>
-              <Route path="/schedule" element={<Schedule />} />
-              <Route path="/time-clock" element={<TimeClock />} />
-              <Route path="/add-job" element={<AddJob />} />
-            </>
-          )}
+          <Route path="/schedule" element={<Schedule />} />
+          {/* Add more routes for other pages like /team */}
+          <Route path="*" element={<Navigate to="/schedule" />} />
         </Routes>
       </div>
     </div>
   );
-}
+};
 
-function App() {
+const App = () => {
   return (
     <Router>
-      <AppContent />
+      <Routes>
+        {/* Render AppContent for all main routes */}
+        <Route path="/*" element={<AppContent />} />
+      </Routes>
     </Router>
   );
-}
+};
 
 export default App;
