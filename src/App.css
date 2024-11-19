@@ -1,0 +1,23 @@
+/* App.css */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Full viewport height */
+  background-color: #f9f9f9; /* Optional background color */
+}
+
+.app-content {
+  width: 100%;
+  max-width: 1200px; /* Limit the width of the app */
+  padding: 20px;
+  background: white; /* Optional background for contrast */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow for styling */
+  border-radius: 8px;
+}
