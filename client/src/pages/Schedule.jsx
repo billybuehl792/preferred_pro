@@ -5,6 +5,7 @@ import parse from 'date-fns/parse';
 import startOfWeek from 'date-fns/startOfWeek';
 import getDay from 'date-fns/getDay';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useNavigate } from 'react-router-dom';
 
 const locales = {
   'en-US': require('date-fns/locale/en-US'),
@@ -19,28 +20,15 @@ const localizer = dateFnsLocalizer({
 });
 
 const Schedule = () => {
-  // Sample job data
-  const [jobs, setJobs] = useState([
-    {
-      id: 1,
-      title: 'Painting Project A',
-      start: new Date(2024, 10, 20), // Nov 20, 2024
-      end: new Date(2024, 10, 22), // Nov 22, 2024
-      color: '#FF5733', // Orange
-    },
-    {
-      id: 2,
-      title: 'Office Renovation',
-      start: new Date(2024, 10, 23), // Nov 23, 2024
-      end: new Date(2024, 10, 25), // Nov 25, 2024
-      color: '#33C1FF', // Blue
-    },
-  ]);
+  const navigate = useNavigate();
+  const [jobs, setJobs] = useState(() => {
+    const savedJobs = localStorage.getItem('jobs');
+    return savedJobs ? JSON.parse(savedJobs) : [];
+  });
 
-  // Click handlers
   const handleDateClick = (date) => {
     const jobsOnDate = jobs.filter(
-      (job) => date >= job.start && date <= job.end
+      (job) => date >= new Date(job.start) && date <= new Date(job.end)
     );
     alert(
       jobsOnDate.length
@@ -62,18 +50,9 @@ const Schedule = () => {
         localizer={localizer}
         events={jobs.map((job) => ({
           ...job,
-          title: (
-            <span
-              style={{
-                backgroundColor: job.color,
-                padding: '2px 4px',
-                borderRadius: '4px',
-                color: '#fff',
-              }}
-            >
-              {job.title}
-            </span>
-          ),
+          start: new Date(job.start),
+          end: new Date(job.end),
+          title: job.title,
         }))}
         startAccessor="start"
         endAccessor="end"
@@ -81,18 +60,12 @@ const Schedule = () => {
         onSelectSlot={handleDateClick}
         onSelectEvent={(event) => handleJobClick(event)}
       />
-      <div className="mt-4 flex justify-between">
+      <div className="mt-4 flex justify-start">
         <button
           className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
-          onClick={() => alert('Add Job functionality coming soon!')}
+          onClick={() => navigate('/add-job')}
         >
           Add Job
-        </button>
-        <button
-          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-          onClick={() => alert('Edit Job functionality coming soon!')}
-        >
-          Edit Job
         </button>
       </div>
     </div>

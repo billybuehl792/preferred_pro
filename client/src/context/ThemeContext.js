@@ -25,7 +25,7 @@ const themes = {
     inputText: '#000000',
     inputBorder: '#d1d5db',
     inputFocusBorder: '#135740',
-    inputPlaceholder: '#6b7280'
+    inputPlaceholder: '#6b7280',
   },
   dark: {
     primary: '#135740',
@@ -49,22 +49,29 @@ const themes = {
     inputText: '#ffffff',
     inputBorder: '#4b5563',
     inputFocusBorder: '#135740',
-    inputPlaceholder: '#9ca3af'
-  }
+    inputPlaceholder: '#9ca3af',
+  },
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState('default');
+  // Retrieve theme from localStorage or default to 'default'
+  const [currentTheme, setCurrentTheme] = useState(
+    () => localStorage.getItem('theme') || 'default'
+  );
 
   useEffect(() => {
+    // Apply theme to the body
     document.body.style.backgroundColor = themes[currentTheme].background;
     document.body.style.color = themes[currentTheme].text;
+
+    // Persist the selected theme in localStorage
+    localStorage.setItem('theme', currentTheme);
   }, [currentTheme]);
 
   const value = {
     theme: currentTheme,
     themes,
-    updateTheme: setCurrentTheme
+    updateTheme: setCurrentTheme,
   };
 
   return (

@@ -1,25 +1,62 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
+import { CalendarDaysIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'; // Correct imports
+import logo from '../../assets/preferred_logo.png'; // Correct logo path
 
 const Sidebar = () => {
+  const { themes, theme } = useTheme();
+  const currentTheme = themes[theme];
+
   return (
-    <div className="bg-green-600 text-white h-full">
-      <div className="p-4 text-2xl font-bold border-b border-green-700">
-        Preferred LLC
+    <div
+      className="fixed inset-y-0 left-0 w-64"
+      style={{
+        backgroundColor: currentTheme.sidebarBg,
+        color: currentTheme.text,
+      }}
+    >
+      <div
+        className="p-6 border-b flex justify-center"
+        style={{ borderColor: currentTheme.cardBg }}
+      >
+        <img src={logo} alt="App Logo" className="h-16 w-auto" />
       </div>
       <nav className="mt-4">
-        <Link to="/schedule" className="block py-2 px-4 rounded hover:bg-green-700 transition duration-300">
+        <NavLink
+          to="/schedule"
+          className={({ isActive }) =>
+            `block px-6 py-3 flex items-center gap-4 ${
+              isActive
+                ? 'font-bold underline'
+                : 'hover:bg-opacity-50'
+            }`
+          }
+          style={({ isActive }) => ({
+            backgroundColor: isActive ? currentTheme.cardBg : 'transparent',
+            color: isActive ? currentTheme.cardText : currentTheme.text,
+          })}
+        >
+          <CalendarDaysIcon className="h-5 w-5" /> {/* Schedule Icon */}
           Schedule
-        </Link>
-        <Link to="/time-clock" className="block py-2 px-4 rounded hover:bg-green-700 transition duration-300">
-          Time Clock
-        </Link>
-        <Link to="/team" className="block py-2 px-4 rounded hover:bg-green-700 transition duration-300">
-          Team
-        </Link>
-        <Link to="/add-job" className="block py-2 px-4 rounded hover:bg-green-700 transition duration-300">
-          Add Job
-        </Link>
+        </NavLink>
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            `block px-6 py-3 flex items-center gap-4 ${
+              isActive
+                ? 'font-bold underline'
+                : 'hover:bg-opacity-50'
+            }`
+          }
+          style={({ isActive }) => ({
+            backgroundColor: isActive ? currentTheme.cardBg : 'transparent',
+            color: isActive ? currentTheme.cardText : currentTheme.text,
+          })}
+        >
+          <Cog6ToothIcon className="h-5 w-5" /> {/* Settings Icon */}
+          Settings
+        </NavLink>
       </nav>
     </div>
   );
